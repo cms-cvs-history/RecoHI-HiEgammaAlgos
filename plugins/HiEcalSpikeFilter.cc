@@ -13,7 +13,7 @@
 //
 // Original Author:  Yong Kim,32 4-A08,+41227673039,
 //         Created:  Wed Oct 27 23:56:49 CEST 2010
-// $Id: HiEcalSpikeFilter.cc,v 1.3 2010/10/28 13:26:07 kimy Exp $
+// $Id: HiEcalSpikeFilter.cc,v 1.1 2010/10/28 16:02:06 kimy Exp $
 //
 //
 
@@ -164,7 +164,7 @@ HiEcalSpikeFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
    leadingEt = leadingPho->et();
    leadingEta = leadingPho->eta();
    leadingScEta = leadingPho->superCluster()->eta();
-   cout << " leading et = " << leadingEt << "GeV,   eta= " << leadingEta <<endl;
+   //   cout << " leading et = " << leadingEt << "GeV,   eta= " << leadingEta <<endl;
    
    // If the leading photon is at Endcap, then pass this event. 
    if ( fabs(leadingScEta) > 1.479)  return true;
@@ -180,7 +180,7 @@ HiEcalSpikeFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
       severity = EcalSeverityLevelAlgo::severityLevel( id, rechits, *chStatus );
       recoFlag = it->recoFlag();
    }
-   cout << "severity= " << severity << "   recoFlag= " << recoFlag <<endl;
+   //   cout << "severity= " << severity << "   recoFlag= " << recoFlag <<endl;
    //  cout << "definition of severity : http://cmslxr.fnal.gov/lxr/source/RecoLocalCalo/EcalRecAlgos/interface/EcalSeverityLevelAlgo.h?v=CMSSW_3_9_0_pre4" << endl;
    //  cout << "and that   of reco flag: http://cmslxr.fnal.gov/lxr/source/DataFormats/EcalRecHit/interface/EcalRecHit.h?v=CMSSW_3_9_0_pre4#074" << endl;
    
