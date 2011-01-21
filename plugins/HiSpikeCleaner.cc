@@ -1,5 +1,5 @@
 // -*- C++ -*-
-//
+//111
 // Package:    HiSpikeCleaner
 // Class:      HiSpikeCleaner
 // 
@@ -13,7 +13,7 @@
 //
 // Original Author:  Yong Kim,32 4-A08,+41227673039,
 //         Created:  Mon Nov  1 18:22:21 CET 2010
-// $Id: HiSpikeCleaner.cc,v 1.4 2010/11/02 23:44:49 kimy Exp $
+// $Id: HiSpikeCleaner.cc,v 1.8 2011/01/20 15:22:17 vlimant Exp $
 //
 //
 
@@ -36,9 +36,9 @@
 #include "DataFormats/EgammaCandidates/interface/Photon.h"
 #include "DataFormats/EgammaCandidates/interface/PhotonFwd.h"
 
+#include "RecoEcal/EgammaCoreTools/interface/EcalTools.h"
+#include "RecoLocalCalo/EcalRecAlgos/interface/EcalSeverityLevelAlgoRcd.h"
 #include "RecoLocalCalo/EcalRecAlgos/interface/EcalSeverityLevelAlgo.h"
-#include "CondFormats/DataRecord/interface/EcalChannelStatusRcd.h"
-#include "CondFormats/EcalObjects/interface/EcalChannelStatusCode.h"
 #include "RecoEcal/EgammaCoreTools/interface/EcalClusterLazyTools.h"
 
 
@@ -158,9 +158,11 @@ HiSpikeCleaner::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
    
    // get the channel status from the DB                                                                                                     
-   edm::ESHandle<EcalChannelStatus> chStatus;
-   iSetup.get<EcalChannelStatusRcd>().get(chStatus);
+   //   edm::ESHandle<EcalChannelStatus> chStatus;
+   //   iSetup.get<EcalChannelStatusRcd>().get(chStatus);
    
+   edm::ESHandle<EcalSeverityLevelAlgo> ecalSevLvlAlgoHndl;
+   iSetup.get<EcalSeverityLevelAlgoRcd>().get(ecalSevLvlAlgoHndl);
    
    
    // Create a pointer to the RecHits and raw SuperClusters
@@ -191,21 +193,21 @@ HiSpikeCleaner::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 	 EcalRecHitCollection::const_iterator it = rechits.find( id );
 	 
 	 if( it != rechits.end() ) {
-	    severity = EcalSeverityLevelAlgo::severityLevel(id, rechits, *chStatus );
-	    swissCrx = EcalSeverityLevelAlgo::swissCross   (id, rechits, 0.,true);
+	    severity = ecalSevLvlAlgoHndl->severityLevel(id, rechits);
+	    swissCrx = EcalTools::swissCross   (id, rechits, 0.,true);
 	    //	    std::cout << "swissCross = " << swissCrx <<std::endl;
 	    // std::cout << " timing = " << it->time() << std::endl;
 	 }
 	 
 	 if ( fabs(it->time()) > TimingCut_ ) {
 	    flagS = false;
-	    std::cout << " timing = " << it->time() << std::endl;
-	    std::cout << " timing is bad........" << std::endl; 
+	    //	    std::cout << " timing = " << it->time() << std::endl;
+	    //   std::cout << " timing is bad........" << std::endl; 
 	 }
 	 if ( swissCrx > (float)swissCutThr_ ) {
 	    flagS = false ;     // swissCross cut
-	    std::cout << "swissCross = " << swissCrx <<std::endl;   
-	    std::cout << " removed by swiss cross cut" << std::endl;
+	    //	    std::cout << "swissCross = " << swissCrx <<std::endl;   
+	    //   std::cout << " removed by swiss cross cut" << std::endl;
 	 }
 	 // - kGood        --> good channel
 	 // - kProblematic --> problematic (e.g. noisy)
