@@ -14,6 +14,7 @@ from RecoEgamma.EgammaElectronProducers.gsfElectronSequence_cff import *
 from RecoParticleFlow.PFProducer.pfElectronTranslator_cff import *
 gsfElectrons.ctfTracks     = cms.InputTag("hiGlobalPrimTracks")
 gsfElectronCores.ctfTracks = cms.InputTag("hiGlobalPrimTracks")
+pfElectronTranslator.emptyIsOk = cms.bool(True)
 
 hiElectronSequence = cms.Sequence(electronGsfTrackingHi * 
 			          pfElectronTranslator * 
